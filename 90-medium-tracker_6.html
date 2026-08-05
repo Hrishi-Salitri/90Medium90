@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>90 Medium 🫛 Sejal &amp; Hrishi</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫛</text></svg>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="90 Medium">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --mint-0:#f3fbf1;
+    --mint-1:#e4f6df;
+    --mint-2:#cdeec3;
+    --pea-1:#8cc63f;
+    --pea-2:#5fa83f;
+    --pea-3:#3d7a2c;
+    --cream:#fffdf6;
+    --sejal:#f2a6c1;
+    --sejal-deep:#d6608f;
+    --hrishi:#8fb8e8;
+    --hrishi-deep:#4d7fc4;
+    --ink:#2f3a2a;
+    --muted:#7a8a72;
+    --gold:#f4c84f;
+    --shadow: 0 6px 20px rgba(60,100,40,0.12);
+    --shadow-soft: 0 2px 8px rgba(60,100,40,0.08);
+    --radius: 22px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Quicksand', sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, var(--mint-1), transparent 45%),
+      radial-gradient(circle at 90% 10%, #fdeef4, transparent 40%),
+      var(--mint-0);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  h1,h2,h3, .heading{font-family:'Baloo 2', cursive;}
+  .wrap{max-width:980px; margin:0 auto; padding:14px 14px 0;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    text-align:center;
+    padding:22px 14px 14px;
+    position:relative;
+  }
+  .podlogo{ font-size:44px; line-height:1; margin-bottom:2px; filter:drop-shadow(0 3px 4px rgba(0,0,0,0.08));}
+  header.top h1{
+    font-size:28px; margin:2px 0 2px; color:var(--pea-3); font-weight:800;
+    letter-spacing:0.3px;
+  }
+  header.top .sub{ color:var(--muted); font-size:14.5px; margin:0 0 6px; font-weight:600;}
+  .sync-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:700; color:var(--pea-3);
+    background:var(--cream); border:1.5px solid var(--mint-2);
+    padding:5px 12px; border-radius:999px; box-shadow:var(--shadow-soft);
+  }
+  .sync-pill .dot{width:8px;height:8px;border-radius:50%;background:#8cc63f;}
+  .sync-pill.syncing .dot{background:var(--gold); animation:pulse 1s infinite;}
+  .sync-pill.offline .dot{background:#e07a5f;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .setup-banner{
+    background:#fff6e0; border:1.5px dashed #e6b84f; color:#7a5b12;
+    border-radius:16px; padding:12px 16px; font-size:13.5px; font-weight:600;
+    max-width:900px; margin:10px auto; line-height:1.5;
+  }
+  .setup-banner code{background:#fff0c4; padding:1px 5px; border-radius:6px;}
+  .refresh-btn{
+    display:inline-flex; align-items:center; gap:5px; margin-left:8px;
+    font-size:12px; font-weight:700; color:var(--pea-3);
+    background:var(--cream); border:1.5px solid var(--mint-2); cursor:pointer;
+    padding:5px 12px; border-radius:999px; box-shadow:var(--shadow-soft);
+  }
+  .refresh-btn:active{ transform:scale(0.95); }
+  .refresh-btn.spinning{ animation:spin 0.8s linear infinite; }
+  @keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+  /* ---------- Onboarding overlay ---------- */
+  .onboard-overlay{
+    position:fixed; inset:0; background:rgba(47,58,42,0.55); z-index:10000;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .onboard-card{
+    background:var(--cream); border-radius:24px; padding:26px 22px; max-width:420px;
+    width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); text-align:center;
+    max-height:92vh; overflow-y:auto;
+  }
+  .onboard-card .emoji{font-size:40px; margin-bottom:6px;}
+  .onboard-card h2{ margin:4px 0 6px; color:var(--pea-3); font-size:22px;}
+  .onboard-card p{ color:var(--muted); font-size:13.5px; line-height:1.5; margin:6px 0 16px;}
+  .onboard-btn{
+    display:block; width:100%; border:none; border-radius:14px; padding:13px;
+    font-family:'Baloo 2'; font-weight:700; font-size:15px; cursor:pointer; margin-bottom:10px;
+  }
+  .onboard-btn.primary{ background:linear-gradient(135deg, var(--pea-1), var(--pea-2)); color:#fff; }
+  .onboard-btn.primary:active{ transform:scale(0.98); }
+  .onboard-divider{ color:var(--muted); font-size:12px; font-weight:700; margin:14px 0 10px; text-transform:uppercase;}
+  .onboard-input{
+    width:100%; border:1.5px solid var(--mint-2); border-radius:12px; padding:11px;
+    font-family:'Quicksand'; font-size:13.5px; margin-bottom:10px; box-sizing:border-box;
+  }
+  .onboard-btn.secondary{ background:var(--mint-1); color:var(--pea-3); }
+  .onboard-status{ font-size:12.5px; font-weight:700; min-height:18px; margin:6px 0; color:var(--pea-3);}
+  .onboard-status.err{ color:#c0503a; }
+  .share-box{
+    background:var(--mint-1); border-radius:14px; padding:12px; margin:10px 0; text-align:left;
+  }
+  .share-box .lbl{font-size:11px; font-weight:800; color:var(--pea-3); text-transform:uppercase; margin-bottom:6px;}
+  .share-box textarea{
+    width:100%; border:1px solid var(--mint-2); border-radius:8px; padding:8px; font-size:11.5px;
+    font-family:monospace; resize:none; height:54px; box-sizing:border-box; color:var(--ink); background:#fff;
+  }
+  .share-box button{
+    margin-top:8px; border:none; background:var(--pea-2); color:#fff; font-weight:700;
+    font-size:12.5px; padding:7px 14px; border-radius:10px; cursor:pointer;
+  }
+
+  /* ---------- Overview stats ---------- */
+  .overview{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin:8px 0 18px;
+  }
+  .stat-chip{
+    background:var(--cream); border-radius:16px; padding:10px 16px;
+    box-shadow:var(--shadow-soft); text-align:center; min-width:92px;
+  }
+  .stat-chip .num{font-family:'Baloo 2'; font-size:20px; font-weight:800; color:var(--pea-3);}
+  .stat-chip .lbl{font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.4px;}
+
+  /* ---------- Day strip ---------- */
+  .daystrip-outer{ margin-bottom:18px; }
+  .daystrip-label{
+    font-size:13px; font-weight:700; color:var(--pea-3); margin:0 4px 6px; text-align:center;
+  }
+  .daystrip{
+    display:flex; gap:8px; overflow-x:auto; padding:6px 4px 12px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  .daystrip::-webkit-scrollbar{height:6px;}
+  .daystrip::-webkit-scrollbar-thumb{background:var(--mint-2); border-radius:6px;}
+  .day-pill{
+    scroll-snap-align:center;
+    flex:0 0 auto; width:58px; text-align:center; cursor:pointer;
+    background:var(--cream); border-radius:14px; padding:8px 4px;
+    box-shadow:var(--shadow-soft); border:2px solid transparent;
+    transition:transform .15s ease;
+    user-select:none;
+  }
+  .day-pill:active{transform:scale(0.94);}
+  .day-pill .dow{font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase;}
+  .day-pill .dnum{font-family:'Baloo 2'; font-size:17px; font-weight:700; color:var(--ink);}
+  .day-pill .dots{display:flex; justify-content:center; gap:3px; margin-top:4px;}
+  .day-pill .dots span{width:7px;height:7px;border-radius:50%; background:#e3e3dd;}
+  .day-pill .dots span.on-s{background:var(--sejal-deep);}
+  .day-pill .dots span.on-h{background:var(--hrishi-deep);}
+  .day-pill.today{border-color:var(--gold);}
+  .day-pill.selected{border-color:var(--pea-2); background:var(--mint-1);}
+  .day-pill .idx{font-size:9px; color:var(--muted); font-weight:700;}
+
+  /* ---------- Selected day header ---------- */
+  .selected-date-banner{
+    text-align:center; margin-bottom:14px;
+  }
+  .selected-date-banner .big{font-family:'Baloo 2'; font-size:19px; font-weight:700; color:var(--pea-3);}
+  .selected-date-banner .small{font-size:12.5px; color:var(--muted); font-weight:600;}
+
+  /* ---------- Pod cards ---------- */
+  .pods{ display:grid; grid-template-columns:1fr; gap:18px; }
+  @media(min-width:760px){ .pods{grid-template-columns:1fr 1fr;} }
+
+  .pod-card{
+    background:var(--cream);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px 16px 20px;
+    position:relative;
+    overflow:hidden;
+    border:3px solid transparent;
+    transition:border-color .4s ease, box-shadow .4s ease;
+  }
+  .pod-card.complete{ border-color:var(--gold); box-shadow:0 8px 26px rgba(244,200,79,0.35);}
+  .pod-card::before{
+    content:""; position:absolute; top:-40px; right:-40px; width:140px; height:140px;
+    border-radius:50%; opacity:0.35; z-index:0;
+  }
+  .pod-card.sejal::before{ background:radial-gradient(circle, var(--sejal) 0%, transparent 70%);}
+  .pod-card.hrishi::before{ background:radial-gradient(circle, var(--hrishi) 0%, transparent 70%);}
+
+  .pod-head{ display:flex; align-items:center; gap:10px; position:relative; z-index:1; margin-bottom:10px;}
+  .pea-avatar{
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    box-shadow:inset 0 -4px 6px rgba(0,0,0,0.08);
+    flex:0 0 auto;
+  }
+  .pod-card.sejal .pea-avatar{ background:linear-gradient(160deg, #d7f2c7, var(--pea-1)); }
+  .pod-card.hrishi .pea-avatar{ background:linear-gradient(160deg, #cfe6fb, var(--hrishi)); }
+  .pod-head h2{ margin:0; font-size:20px; font-weight:700; }
+  .pod-card.sejal h2{color:var(--sejal-deep);}
+  .pod-card.hrishi h2{color:var(--hrishi-deep);}
+  .pod-head .streak{ margin-left:auto; font-size:12px; font-weight:700; color:var(--muted); text-align:right;}
+  .pod-head .streak b{color:var(--pea-3); font-family:'Baloo 2';}
+
+  .section-label{
+    font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
+    color:var(--muted); margin:14px 0 6px; position:relative; z-index:1;
+  }
+
+  .item-row{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:8px 6px; border-radius:12px; cursor:pointer;
+    position:relative; z-index:1;
+    transition:background .15s ease;
+  }
+  .item-row:hover{ background:rgba(140,198,63,0.08);}
+  .checkbox{
+    flex:0 0 auto; width:24px; height:24px; border-radius:8px;
+    border:2.4px solid #c9dcc0; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; margin-top:1px; transition:all .15s ease;
+  }
+  .item-row.checked .checkbox{ background:var(--pea-2); border-color:var(--pea-2); color:#fff; transform:scale(1.03);}
+  .item-text{ font-size:14.5px; font-weight:600; line-height:1.35; flex:1;}
+  .item-row.checked .item-text{ color:var(--muted); text-decoration:line-through; text-decoration-color:#c9dcc0;}
+  .weekly-badge{
+    font-size:10.5px; font-weight:800; color:var(--pea-3); background:var(--mint-1);
+    border-radius:999px; padding:2px 8px; white-space:nowrap; margin-top:2px;
+  }
+  .weekly-badge.met{ background:var(--gold); color:#6b4e00;}
+
+  .alcohol-note{
+    margin-left:34px; margin-top:-2px; margin-bottom:2px; position:relative; z-index:1;
+  }
+  .alcohol-note input{
+    width:64px; border:1.5px solid var(--mint-2); border-radius:8px; padding:3px 6px;
+    font-family:'Quicksand'; font-weight:600; font-size:13px; color:var(--ink);
+  }
+  .alcohol-note label{ font-size:12px; color:var(--muted); font-weight:600; margin-right:6px;}
+
+  /* ---------- Water widget ---------- */
+  .water-box{
+    margin-top:14px; background:linear-gradient(180deg, #eaf6ff, #f7fdff);
+    border-radius:16px; padding:14px; position:relative; z-index:1;
+    border:1.5px solid #dcedf9;
+  }
+  .water-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .water-top .wt-label{ font-size:12.5px; font-weight:800; color:#3f74ad; text-transform:uppercase; letter-spacing:.4px;}
+  .water-top .wt-remain{ font-size:12.5px; font-weight:700; color:var(--muted);}
+  .water-bar-outer{
+    width:100%; height:16px; background:#dbeefc; border-radius:999px; overflow:hidden;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .water-bar-inner{
+    height:100%; background:linear-gradient(90deg, #7ec8f2, #4d9fe0);
+    border-radius:999px; transition:width .4s ease; position:relative;
+  }
+  .water-bar-inner.full{ background:linear-gradient(90deg, #6fd18c, #3fae6b);}
+  .water-count{ text-align:center; font-family:'Baloo 2'; font-size:22px; font-weight:700; color:#3f74ad; margin:8px 0 2px;}
+  .water-count.full{ color:#2f8a56;}
+  .water-goal-txt{ text-align:center; font-size:12px; color:var(--muted); font-weight:600; margin-bottom:10px;}
+  .water-btns{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+  .wbtn{
+    border:none; background:#fff; color:#3f74ad; font-weight:700; font-size:13px;
+    padding:8px 12px; border-radius:12px; cursor:pointer; box-shadow:var(--shadow-soft);
+    display:flex; align-items:center; gap:5px;
+  }
+  .wbtn:active{ transform:scale(0.95);}
+  .wbtn.undo{ color:#b5654a; }
+  .wbtn.custom{ background:#eef8ff;}
+
+  /* ---------- Celebration ---------- */
+  .confetti-piece{
+    position:fixed; top:-20px; width:9px; height:14px; border-radius:2px;
+    pointer-events:none; z-index:9999;
+  }
+  .celebrate-toast{
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; font-weight:700; font-size:14px;
+    padding:12px 20px; border-radius:999px; box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    opacity:0; transition:all .4s ease; z-index:9998; text-align:center; max-width:88vw;
+  }
+  .celebrate-toast.show{ opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .both-banner{
+    display:none; text-align:center; margin:0 0 18px;
+    background:linear-gradient(135deg, #fff4d6, #ffe9f0, #e3f6ff);
+    border-radius:20px; padding:16px; box-shadow:var(--shadow);
+    font-family:'Baloo 2'; font-weight:700; color:#6b4e00; font-size:16px;
+    border:2px dashed var(--gold);
+  }
+  .both-banner.show{ display:block; }
+
+  footer{ text-align:center; margin-top:30px; color:var(--muted); font-size:12px; font-weight:600; padding:0 20px;}
+  footer a{color:var(--pea-3);}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="podlogo">🫛</div>
+    <h1>90 Medium</h1>
+    <div class="sub">Sejal &amp; Hrishi · two peas, one pod · Aug 4 – Nov 1, 2026</div>
+    <div class="sync-pill" id="syncPill"><span class="dot"></span><span id="syncText">Loading…</span></div>
+    <button class="refresh-btn" id="refreshBtn" title="Check for your partner's latest updates">🔄 Refresh</button>
+    <button class="refresh-btn" id="getLinkBtn" title="Copy your shareable link (handy for a new device)">🔗 Link</button>
+  </header>
+
+  <div class="overview" id="overview"></div>
+
+  <div class="both-banner" id="bothBanner">🎉 Two peas, one pod — you BOTH crushed today! 💚💙</div>
+
+  <div class="daystrip-outer">
+    <div class="daystrip-label">Tap a day to view or update it</div>
+    <div class="daystrip" id="daystrip"></div>
+  </div>
+
+  <div class="selected-date-banner">
+    <div class="big" id="selBig">–</div>
+    <div class="small" id="selSmall">–</div>
+  </div>
+
+  <div class="pods">
+    <div class="pod-card sejal" id="cardSejal"></div>
+    <div class="pod-card hrishi" id="cardHrishi"></div>
+  </div>
+
+  <footer>
+    Made with 💚 for the 90 Medium challenge ·
+    <span id="lastSync">–</span>
+  </footer>
+</div>
+
+<div class="celebrate-toast" id="toast"></div>
+
+<div class="onboard-overlay" id="onboardOverlay" style="display:none;">
+  <div class="onboard-card">
+    <div class="emoji">🫛</div>
+    <h2>Let's link your pod</h2>
+    <p>No accounts, no files to edit. One of you creates your shared tracker, then sends the
+       other a link — that's the whole setup.</p>
+
+    <button class="onboard-btn primary" id="btnCreateShared">🌱 Start our tracker (I'm first)</button>
+    <div class="onboard-status" id="createStatus"></div>
+    <div class="share-box" id="shareBox" style="display:none;">
+      <div class="lbl">Send this link to your partner 💌</div>
+      <textarea id="shareLinkText" readonly></textarea>
+      <button id="copyShareBtn">Copy link</button>
+      <button id="continueAfterCreate" style="margin-left:8px; background:var(--pea-3);">Continue →</button>
+    </div>
+
+    <div class="onboard-divider">— or —</div>
+    <p style="margin-top:-6px;">Got a link or code from your partner? Paste it below.</p>
+    <input class="onboard-input" id="codeInput" placeholder="Paste link or code here">
+    <button class="onboard-btn secondary" id="btnConnect">🔗 Connect us</button>
+    <div class="onboard-status" id="connectStatus"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIG — nothing to edit here. Syncing is set up entirely in-app (see the
+   "Let's link your pod" screen) using the free, no-signup jsonstorage.net API.
+   ========================================================================= */
+const CONFIG = {
+  START_DATE: "2026-08-04",   // Day 1
+  TOTAL_DAYS: 90,
+  API_BASE: "https://api.jsonstorage.net/v1/json"
+};
+
+/* =========================================================================
+   ITEM DEFINITIONS
+   ========================================================================= */
+const PEOPLE = {
+  sejal: {
+    name: "Sejal", key:"sejal", color:"sejal",
+    avatar:"🌱",
+    water:{ goal:96, bottleOz:24, bottleLabel:"1 Owala (24oz)" },
+    physical: [
+      {id:"steps",      label:"10,000 steps"},
+      {id:"workout",    label:"Lift / Pilates / Yoga workout"},
+      {id:"core",       label:"Core workout", weekly:3},
+      {id:"nofastfood", label:"No fast food / soda"},
+      {id:"eatcutoff",  label:"Finished eating 2 hrs before bed"},
+      {id:"mealplan",   label:"Cooked / planned meals for the week", weekly:1},
+      {id:"alcohol",    label:"Logged alcohol intake (or none)", hasCount:true},
+    ],
+    mental: [
+      {id:"read",    label:"Read 5 pages"},
+      {id:"nomedia", label:"No media 30 min pre &amp; post sleep"},
+      {id:"journal", label:"Journaled / meditated", weekly:3},
+    ]
+  },
+  hrishi: {
+    name: "Hrishi", key:"hrishi", color:"hrishi",
+    avatar:"🌿",
+    water:{ goal:120, bottleOz:24, bottleLabel:"1 Owala (24oz)" },
+    physical: [
+      {id:"stretch",    label:"Stretching / mobility session"},
+      {id:"workout",    label:"Lift / Run / Bike / HIIT / Cardio"},
+      {id:"core",       label:"Core workout", weekly:2},
+      {id:"nofastfood", label:"No fast food / soda"},
+      {id:"eatcutoff",  label:"Finished eating 2 hrs before bed"},
+      {id:"calorie",    label:"Loosely followed calorie / protein goals"},
+      {id:"alcohol",    label:"Logged alcohol intake (or none)", hasCount:true},
+    ],
+    mental: [
+      {id:"read",     label:"Read 5 pages"},
+      {id:"newsread", label:"News or financial literacy article/video"},
+      {id:"nomedia",  label:"No media in am / 30 min pre-sleep"},
+      {id:"learn",    label:"Learned something new", weekly:1},
+    ]
+  }
+};
+
+/* =========================================================================
+   DATE HELPERS
+   ========================================================================= */
+function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y, m-1, d); }
+function toISO(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addDays(iso, n){ const d=parseISO(iso); d.setDate(d.getDate()+n); return toISO(d); }
+const START = CONFIG.START_DATE;
+const ALL_DATES = Array.from({length: CONFIG.TOTAL_DAYS}, (_,i)=> addDays(START, i));
+function todayISO(){ return toISO(new Date()); }
+function dowShort(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"short"}); }
+function niceDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"}); }
+function shortDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{month:"short", day:"numeric"}); }
+// Monday-start week key for grouping "times per week" counters
+function weekKey(iso){
+  const d=parseISO(iso);
+  const dow=(d.getDay()+6)%7; // 0=Mon
+  const monday=new Date(d); monday.setDate(d.getDate()-dow);
+  return toISO(monday);
+}
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+let state = { sejal:{days:{}}, hrishi:{days:{}} };
+let selectedDate = ALL_DATES.includes(todayISO()) ? todayISO() : START;
+let celebratedToday = {}; // sessionOnly: `${person}|${date}` -> true, to avoid re-firing confetti
+let saveQueued = false, saveTimer = null, isSyncing = false;
+
+function blankDay(){ return { checks:{}, water:0, drinksCount:0 }; }
+function getDay(personKey, iso){
+  const days = state[personKey].days;
+  if(!days[iso]) days[iso] = blankDay();
+  if(days[iso].checks===undefined) days[iso].checks = {};
+  if(days[iso].water===undefined) days[iso].water = 0;
+  if(days[iso].drinksCount===undefined) days[iso].drinksCount = 0;
+  return days[iso];
+}
+
+/* =========================================================================
+   REQUIRED-ITEM / COMPLETION LOGIC
+   ========================================================================= */
+function requiredItems(person){
+  return [...person.physical, ...person.mental].filter(it=>!it.weekly);
+}
+function isDayComplete(personKey, iso){
+  const person = PEOPLE[personKey];
+  const day = getDay(personKey, iso);
+  const reqs = requiredItems(person);
+  const allChecked = reqs.every(it => !!day.checks[it.id]);
+  const waterOk = day.water >= person.water.goal;
+  return allChecked && waterOk;
+}
+function weeklyCount(personKey, itemId, iso){
+  const wk = weekKey(iso);
+  const days = state[personKey].days;
+  let count=0;
+  Object.keys(days).forEach(d=>{
+    if(weekKey(d)===wk && days[d].checks && days[d].checks[itemId]) count++;
+  });
+  return count;
+}
+
+/* =========================================================================
+   LINK CODE — identifies the one shared jsonstorage.net item both phones use.
+   Stored in the URL hash (so a shared link "just works") AND in localStorage
+   as a convenience fallback (never required — the app works fine without it
+   as long as you keep using the same link).
+   ========================================================================= */
+function safeLocalGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function safeLocalSet(key,val){ try{ localStorage.setItem(key,val); }catch(e){} }
+
+let linkCode = null; // format "userId.itemId"
+
+function itemUrlFromCode(code){
+  const [userId, itemId] = code.split(".");
+  return `${CONFIG.API_BASE}/${userId}/${itemId}`;
+}
+function extractCodeFromText(text){
+  if(!text) return null;
+  text = text.trim();
+  // full shared link containing #code=...
+  const hashMatch = text.match(/code=([a-zA-Z0-9\-]+\.[a-zA-Z0-9\-]+)/);
+  if(hashMatch) return hashMatch[1];
+  // a jsonstorage URI like https://api.jsonstorage.net/v1/json/{userId}/{itemId}
+  const uriMatch = text.match(/\/v1\/json\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)/);
+  if(uriMatch) return `${uriMatch[1]}.${uriMatch[2]}`;
+  // a bare "userId.itemId" code
+  if(/^[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-]+$/.test(text)) return text;
+  return null;
+}
+function getStoredCode(){
+  const hash = location.hash.replace(/^#/,"");
+  const params = new URLSearchParams(hash);
+  const fromHash = params.get("code");
+  if(fromHash) return fromHash;
+  return safeLocalGet("ninetyMediumCode");
+}
+function storeCode(code){
+  linkCode = code;
+  safeLocalSet("ninetyMediumCode", code);
+  const url = new URL(location.href);
+  url.hash = `code=${code}`;
+  history.replaceState(null, "", url.toString());
+}
+
+/* =========================================================================
+   REMOTE SYNC (jsonstorage.net — free, no signup, documented CORS)
+   ========================================================================= */
+function setSyncPill(mode, text){
+  const pill=document.getElementById("syncPill");
+  pill.classList.remove("syncing","offline");
+  if(mode) pill.classList.add(mode);
+  document.getElementById("syncText").textContent = text;
+}
+async function fetchRemote(){
+  if(!linkCode) return;
+  setSyncPill("syncing","Syncing…");
+  try{
+    const res = await fetch(itemUrlFromCode(linkCode));
+    if(res.ok){
+      const data = await res.json();
+      if(data && data.sejal && data.hrishi){
+        state = data;
+      }
+      setSyncPill(null,"Synced ✓");
+      document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
+    } else {
+      setSyncPill("offline","Sync error — retrying soon");
+    }
+  }catch(e){
+    setSyncPill("offline","Offline — will retry");
+  }
+  renderAll();
+}
+async function pushRemote(){
+  if(!linkCode) return;
+  try{
+    await fetch(itemUrlFromCode(linkCode), {
+      method:"PUT",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(state)
+    });
+    setSyncPill(null,"Synced ✓");
+    document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
+  }catch(e){
+    setSyncPill("offline","Offline — changes saved locally, will retry");
+  }
+}
+// read-merge-write: refetch latest, merge our local day-object in, then push
+async function saveChange(personKey, iso){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    if(!linkCode) return;
+    setSyncPill("syncing","Saving…");
+    try{
+      const res = await fetch(itemUrlFromCode(linkCode));
+      let remote = res.ok ? await res.json() : null;
+      if(!remote || !remote.sejal || !remote.hrishi) remote = { sejal:{days:{}}, hrishi:{days:{}} };
+      // merge in this person's current local day (our most recent edit)
+      remote[personKey].days[iso] = state[personKey].days[iso];
+      state = remote;
+      await pushRemote();
+    }catch(e){
+      setSyncPill("offline","Offline — will retry");
+    }
+  }, 500);
+}
+
+/* =========================================================================
+   CONFETTI + TOAST
+   ========================================================================= */
+function toast(msg, ms=3200){
+  const t=document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._hideTimer);
+  t._hideTimer = setTimeout(()=>t.classList.remove("show"), ms);
+}
+function confettiBurst(count=60){
+  const colors=["#8cc63f","#f2a6c1","#8fb8e8","#f4c84f","#5fa83f","#fff"];
+  for(let i=0;i<count;i++){
+    const el=document.createElement("div");
+    el.className="confetti-piece";
+    el.style.left = (Math.random()*100)+"vw";
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.transform = `rotate(${Math.random()*360}deg)`;
+    const duration = 2200 + Math.random()*1400;
+    const drift = (Math.random()-0.5)*160;
+    document.body.appendChild(el);
+    el.animate([
+      { transform:`translate(0,0) rotate(0deg)`, opacity:1 },
+      { transform:`translate(${drift}px, 100vh) rotate(${360+Math.random()*360}deg)`, opacity:0.9 }
+    ], { duration, easing:"cubic-bezier(.25,.46,.45,.94)" });
+    setTimeout(()=>el.remove(), duration+50);
+  }
+}
+
+/* =========================================================================
+   RENDERING
+   ========================================================================= */
+function renderOverview(){
+  const el=document.getElementById("overview");
+  const dayIdx = ALL_DATES.indexOf(todayISO());
+  const dayNum = dayIdx>=0 ? dayIdx+1 : (todayISO() < START ? 0 : CONFIG.TOTAL_DAYS);
+  function countComplete(personKey){
+    return ALL_DATES.filter(d => d <= todayISO() && isDayComplete(personKey,d)).length;
+  }
+  function streak(personKey){
+    let s=0;
+    for(let i=ALL_DATES.indexOf(todayISO()); i>=0; i--){
+      const d=ALL_DATES[i];
+      if(d>todayISO()) continue;
+      if(isDayComplete(personKey,d)) s++; else break;
+    }
+    return s;
+  }
+  el.innerHTML = `
+    <div class="stat-chip"><div class="num">${Math.max(dayNum,0)}/${CONFIG.TOTAL_DAYS}</div><div class="lbl">Day of challenge</div></div>
+    <div class="stat-chip"><div class="num">${countComplete("sejal")}</div><div class="lbl">Sejal complete</div></div>
+    <div class="stat-chip"><div class="num">${countComplete("hrishi")}</div><div class="lbl">Hrishi complete</div></div>
+    <div class="stat-chip"><div class="num">${streak("sejal")}🔥</div><div class="lbl">Sejal streak</div></div>
+    <div class="stat-chip"><div class="num">${streak("hrishi")}🔥</div><div class="lbl">Hrishi streak</div></div>
+  `;
+}
+
+function renderDayStrip(){
+  const strip=document.getElementById("daystrip");
+  strip.innerHTML = ALL_DATES.map((d,i)=>{
+    const isToday = d===todayISO();
+    const isSel = d===selectedDate;
+    const sOn = isDayComplete("sejal",d);
+    const hOn = isDayComplete("hrishi",d);
+    return `<div class="day-pill ${isToday?'today':''} ${isSel?'selected':''}" data-date="${d}">
+      <div class="idx">D${i+1}</div>
+      <div class="dow">${dowShort(d)}</div>
+      <div class="dnum">${parseISO(d).getDate()}</div>
+      <div class="dots"><span class="${sOn?'on-s':''}"></span><span class="${hOn?'on-h':''}"></span></div>
+    </div>`;
+  }).join("");
+  strip.querySelectorAll(".day-pill").forEach(p=>{
+    p.addEventListener("click", ()=>{ selectedDate = p.dataset.date; renderAll(); scrollDayIntoView(); });
+  });
+}
+function scrollDayIntoView(){
+  const strip=document.getElementById("daystrip");
+  const el = strip.querySelector(`.day-pill.selected`);
+  if(el) el.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+}
+
+function renderSelectedBanner(){
+  document.getElementById("selBig").textContent = niceDate(selectedDate);
+  const idx = ALL_DATES.indexOf(selectedDate);
+  document.getElementById("selSmall").textContent = `Day ${idx+1} of ${CONFIG.TOTAL_DAYS}`;
+}
+
+function itemRowHTML(personKey, item, iso){
+  const day = getDay(personKey, iso);
+  const checked = !!day.checks[item.id];
+  let weeklyBadge = "";
+  if(item.weekly){
+    const c = weeklyCount(personKey, item.id, iso);
+    const met = c>=item.weekly;
+    weeklyBadge = `<span class="weekly-badge ${met?'met':''}">${c}/${item.weekly} this wk${met?' ✓':''}</span>`;
+  }
+  let extra = "";
+  if(item.hasCount && checked){
+    extra = `<div class="alcohol-note">
+      <label># drinks (optional):</label>
+      <input type="number" min="0" step="1" value="${day.drinksCount||0}" data-drinkinput="${personKey}|${iso}">
+    </div>`;
+  }
+  return `<div class="item-row ${checked?'checked':''}" data-check="${personKey}|${iso}|${item.id}">
+      <div class="checkbox">${checked?'✓':''}</div>
+      <div class="item-text">${item.label}</div>
+      ${weeklyBadge}
+    </div>${extra}`;
+}
+
+function waterWidgetHTML(personKey, iso){
+  const person = PEOPLE[personKey];
+  const day = getDay(personKey, iso);
+  const goal = person.water.goal;
+  const cur = day.water||0;
+  const pct = Math.min(100, Math.round((cur/goal)*100));
+  const full = cur>=goal;
+  const remain = Math.max(0, goal-cur);
+  return `<div class="water-box">
+    <div class="water-top">
+      <div class="wt-label">💧 Water</div>
+      <div class="wt-remain">${full? 'Goal reached! 🎉' : remain+' oz to go'}</div>
+    </div>
+    <div class="water-bar-outer"><div class="water-bar-inner ${full?'full':''}" style="width:${pct}%"></div></div>
+    <div class="water-count ${full?'full':''}">${cur} / ${goal} oz</div>
+    <div class="water-goal-txt">Goal: ${goal}oz (${person.water.bottleLabel} × ${Math.round(goal/person.water.bottleOz)})</div>
+    <div class="water-btns">
+      <button class="wbtn" data-water="${personKey}|${iso}|8">+8oz 🥤</button>
+      <button class="wbtn" data-water="${personKey}|${iso}|16">+16oz</button>
+      <button class="wbtn" data-water="${personKey}|${iso}|${person.water.bottleOz}">+${person.water.bottleOz}oz 🍶 bottle</button>
+      <button class="wbtn custom" data-watercustom="${personKey}|${iso}">+ custom</button>
+      <button class="wbtn undo" data-water="${personKey}|${iso}|-8">− undo 8oz</button>
+    </div>
+  </div>`;
+}
+
+function renderPersonCard(personKey){
+  const person = PEOPLE[personKey];
+  const el = document.getElementById(personKey==="sejal"?"cardSejal":"cardHrishi");
+  const complete = isDayComplete(personKey, selectedDate);
+  el.classList.toggle("complete", complete);
+
+  el.innerHTML = `
+    <div class="pod-head">
+      <div class="pea-avatar">${person.avatar}</div>
+      <h2>${person.name}${complete?' 🌟':''}</h2>
+      <div class="streak">${complete? '<b>All done!</b> 💚' : ''}</div>
+    </div>
+    <div class="section-label">Physical</div>
+    ${person.physical.map(it=>itemRowHTML(personKey, it, selectedDate)).join("")}
+    <div class="section-label">Mental</div>
+    ${person.mental.map(it=>itemRowHTML(personKey, it, selectedDate)).join("")}
+    ${waterWidgetHTML(personKey, selectedDate)}
+  `;
+
+  el.querySelectorAll("[data-check]").forEach(row=>{
+    row.addEventListener("click", (ev)=>{
+      if(ev.target.tagName==="INPUT") return;
+      const [pKey, iso, itemId] = row.dataset.check.split("|");
+      const day = getDay(pKey, iso);
+      const wasComplete = isDayComplete(pKey, iso);
+      day.checks[itemId] = !day.checks[itemId];
+      const nowComplete = isDayComplete(pKey, iso);
+      handleCompletionChange(pKey, iso, wasComplete, nowComplete);
+      saveChange(pKey, iso);
+      renderAll();
+    });
+  });
+  el.querySelectorAll("[data-drinkinput]").forEach(inp=>{
+    inp.addEventListener("click", e=>e.stopPropagation());
+    inp.addEventListener("change", ()=>{
+      const [pKey, iso] = inp.dataset.drinkinput.split("|");
+      getDay(pKey, iso).drinksCount = parseInt(inp.value||"0",10) || 0;
+      saveChange(pKey, iso);
+    });
+  });
+  el.querySelectorAll("[data-water]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const [pKey, iso, amtStr] = btn.dataset.water.split("|");
+      const amt = parseInt(amtStr,10);
+      const day = getDay(pKey, iso);
+      const wasComplete = isDayComplete(pKey, iso);
+      day.water = Math.max(0, (day.water||0) + amt);
+      const nowComplete = isDayComplete(pKey, iso);
+      handleCompletionChange(pKey, iso, wasComplete, nowComplete);
+      saveChange(pKey, iso);
+      renderAll();
+    });
+  });
+  el.querySelectorAll("[data-watercustom]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const [pKey, iso] = btn.dataset.watercustom.split("|");
+      const val = prompt("Add how many ounces?");
+      const amt = parseInt(val,10);
+      if(!isNaN(amt) && amt!==0){
+        const day = getDay(pKey, iso);
+        const wasComplete = isDayComplete(pKey, iso);
+        day.water = Math.max(0, (day.water||0) + amt);
+        const nowComplete = isDayComplete(pKey, iso);
+        handleCompletionChange(pKey, iso, wasComplete, nowComplete);
+        saveChange(pKey, iso);
+        renderAll();
+      }
+    });
+  });
+}
+
+function handleCompletionChange(personKey, iso, wasComplete, nowComplete){
+  const key = `${personKey}|${iso}`;
+  if(nowComplete && !wasComplete && !celebratedToday[key]){
+    celebratedToday[key] = true;
+    confettiBurst(50);
+    toast(`${PEOPLE[personKey].name}'s pea is glowing! ✨ ${niceDate(iso)} all done!`);
+    // check for both-complete
+    const otherKey = personKey==="sejal" ? "hrishi" : "sejal";
+    if(isDayComplete(otherKey, iso)){
+      setTimeout(()=>{ confettiBurst(90); showBothBanner(); }, 500);
+    }
+  }
+  if(!nowComplete && wasComplete){
+    celebratedToday[key] = false;
+  }
+}
+function showBothBanner(){
+  const b=document.getElementById("bothBanner");
+  b.classList.add("show");
+  toast("🎉 Two peas, one pod — you BOTH finished today!", 4000);
+  setTimeout(()=>b.classList.remove("show"), 6000);
+}
+
+function renderAll(){
+  renderOverview();
+  renderDayStrip();
+  renderSelectedBanner();
+  renderPersonCard("sejal");
+  renderPersonCard("hrishi");
+  document.getElementById("bothBanner").classList.toggle("show", isDayComplete("sejal",selectedDate) && isDayComplete("hrishi",selectedDate));
+}
+
+/* =========================================================================
+   ONBOARDING (create-shared-item / connect-with-code flows)
+   ========================================================================= */
+async function createSharedItem(){
+  const btn = document.getElementById("btnCreateShared");
+  const status = document.getElementById("createStatus");
+  btn.disabled = true;
+  status.classList.remove("err");
+  status.textContent = "Creating your shared tracker…";
+  try{
+    const res = await fetch(CONFIG.API_BASE, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ sejal:{days:{}}, hrishi:{days:{}} })
+    });
+    if(!res.ok) throw new Error("Request failed: " + res.status);
+    const data = await res.json();
+    const uri = data.uri || data.url || "";
+    const m = uri.match(/\/v1\/json\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)/);
+    if(!m) throw new Error("Unexpected response shape");
+    const code = `${m[1]}.${m[2]}`;
+    storeCode(code);
+    status.textContent = "Created! ✅";
+    const shareBox = document.getElementById("shareBox");
+    const shareUrl = new URL(location.href); shareUrl.hash = `code=${code}`;
+    document.getElementById("shareLinkText").value = shareUrl.toString();
+    shareBox.style.display = "block";
+  }catch(e){
+    status.classList.add("err");
+    status.textContent = "Couldn't create it — check your connection and try again. (" + e.message + ")";
+    btn.disabled = false;
+  }
+}
+async function connectWithCode(rawInput){
+  const status = document.getElementById("connectStatus");
+  const code = extractCodeFromText(rawInput);
+  if(!code){
+    status.classList.add("err");
+    status.textContent = "That doesn't look like a valid link or code — try copying it again.";
+    return;
+  }
+  status.classList.remove("err");
+  status.textContent = "Connecting…";
+  try{
+    const res = await fetch(itemUrlFromCode(code));
+    if(!res.ok) throw new Error("Not found (" + res.status + ")");
+    storeCode(code);
+    status.textContent = "Connected! ✅";
+    setTimeout(startApp, 400);
+  }catch(e){
+    status.classList.add("err");
+    status.textContent = "Couldn't connect — double-check the link/code and try again.";
+  }
+}
+function wireOnboarding(){
+  document.getElementById("btnCreateShared").addEventListener("click", createSharedItem);
+  document.getElementById("continueAfterCreate").addEventListener("click", startApp);
+  document.getElementById("copyShareBtn").addEventListener("click", ()=>{
+    const ta = document.getElementById("shareLinkText");
+    ta.select();
+    navigator.clipboard?.writeText(ta.value).catch(()=>{});
+    document.getElementById("copyShareBtn").textContent = "Copied ✓";
+  });
+  document.getElementById("btnConnect").addEventListener("click", ()=>{
+    connectWithCode(document.getElementById("codeInput").value);
+  });
+}
+function wireRefreshButton(){
+  document.getElementById("refreshBtn").addEventListener("click", async ()=>{
+    const btn = document.getElementById("refreshBtn");
+    btn.classList.add("spinning");
+    await fetchRemote();
+    btn.classList.remove("spinning");
+  });
+}
+function wireGetLinkButton(){
+  document.getElementById("getLinkBtn").addEventListener("click", ()=>{
+    if(!linkCode) return;
+    const url = new URL(location.href); url.hash = `code=${linkCode}`;
+    const link = url.toString();
+    navigator.clipboard?.writeText(link).catch(()=>{});
+    toast("Link copied — save it somewhere safe: " + link, 6000);
+  });
+}
+
+/* =========================================================================
+   INIT
+   ========================================================================= */
+async function startApp(){
+  document.getElementById("onboardOverlay").style.display = "none";
+  renderAll();
+  scrollDayIntoView();
+  await fetchRemote();
+  wireRefreshButton();
+  wireGetLinkButton();
+  document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") fetchRemote();
+  });
+}
+(function init(){
+  wireOnboarding();
+  linkCode = getStoredCode();
+  if(linkCode){
+    storeCode(linkCode); // normalize hash + localStorage together
+    startApp();
+  } else {
+    document.getElementById("onboardOverlay").style.display = "flex";
+    renderAll(); // render placeholder UI behind the overlay
+  }
+})();
+</script>
+</body>
+</html>
