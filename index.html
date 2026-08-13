@@ -12,6 +12,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- Supabase JS Client Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
   :root{
     --mint-0:#f3fbf1;
@@ -371,14 +374,16 @@
 
 <script>
 /* =========================================================================
-   CONFIG — nothing to edit here. Syncing is set up entirely in-app (see the
-   "Let's link your pod" screen) using the free, no-signup jsonstorage.net API.
+   CONFIG & SUPABASE INITIALIZATION
    ========================================================================= */
 const CONFIG = {
   START_DATE: "2026-08-04",   // Day 1
   TOTAL_DAYS: 90,
-  API_BASE: "https://api.jsonstorage.net/v1/json"
+  SUPABASE_URL: "https://supabase.com/dashboard/project/nuelyvrhhopjxiasmqjc",         // Replace with your project URL
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51ZWx5dnJoaG9wanhpYXNtcWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1ODI5MTMsImV4cCI6MjEwMjE1ODkxM30.2_MWyiz_4IVjXIZ8iPWWiYTtFdurU3YlzkIXbkAKYog" // Replace with your anon key
 };
+
+const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
 /* =========================================================================
    ITEM DEFINITIONS
@@ -437,7 +442,6 @@ function todayISO(){ return toISO(new Date()); }
 function dowShort(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"short"}); }
 function niceDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"}); }
 function shortDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{month:"short", day:"numeric"}); }
-// Monday-start week key for grouping "times per week" counters
 function weekKey(iso){
   const d=parseISO(iso);
   const dow=(d.getDay()+6)%7; // 0=Mon
@@ -450,8 +454,8 @@ function weekKey(iso){
    ========================================================================= */
 let state = { sejal:{days:{}}, hrishi:{days:{}} };
 let selectedDate = ALL_DATES.includes(todayISO()) ? todayISO() : START;
-let celebratedToday = {}; // sessionOnly: `${person}|${date}` -> true, to avoid re-firing confetti
-let saveQueued = false, saveTimer = null, isSyncing = false;
+let celebratedToday = {};
+let saveTimer = null;
 
 function blankDay(){ return { checks:{}, water:0, drinksCount:0 }; }
 function getDay(personKey, iso){
@@ -488,31 +492,19 @@ function weeklyCount(personKey, itemId, iso){
 }
 
 /* =========================================================================
-   LINK CODE — identifies the one shared jsonstorage.net item both phones use.
-   Stored in the URL hash (so a shared link "just works") AND in localStorage
-   as a convenience fallback (never required — the app works fine without it
-   as long as you keep using the same link).
+   LINK CODE HELPERS
    ========================================================================= */
 function safeLocalGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
 function safeLocalSet(key,val){ try{ localStorage.setItem(key,val); }catch(e){} }
 
-let linkCode = null; // format "userId.itemId"
+let linkCode = null;
 
-function itemUrlFromCode(code){
-  const [userId, itemId] = code.split(".");
-  return `${CONFIG.API_BASE}/${userId}/${itemId}`;
-}
 function extractCodeFromText(text){
   if(!text) return null;
   text = text.trim();
-  // full shared link containing #code=...
-  const hashMatch = text.match(/code=([a-zA-Z0-9\-]+\.[a-zA-Z0-9\-]+)/);
+  const hashMatch = text.match(/code=([a-zA-Z0-9\-]+)/);
   if(hashMatch) return hashMatch[1];
-  // a jsonstorage URI like https://api.jsonstorage.net/v1/json/{userId}/{itemId}
-  const uriMatch = text.match(/\/v1\/json\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)/);
-  if(uriMatch) return `${uriMatch[1]}.${uriMatch[2]}`;
-  // a bare "userId.itemId" code
-  if(/^[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-]+$/.test(text)) return text;
+  if(/^[a-zA-Z0-9\-]+$/.test(text)) return text;
   return null;
 }
 function getStoredCode(){
@@ -531,7 +523,7 @@ function storeCode(code){
 }
 
 /* =========================================================================
-   REMOTE SYNC (jsonstorage.net — free, no signup, documented CORS)
+   REMOTE SYNC (Supabase Realtime & Database)
    ========================================================================= */
 function setSyncPill(mode, text){
   const pill=document.getElementById("syncPill");
@@ -539,58 +531,82 @@ function setSyncPill(mode, text){
   if(mode) pill.classList.add(mode);
   document.getElementById("syncText").textContent = text;
 }
+
 async function fetchRemote(){
   if(!linkCode) return;
   setSyncPill("syncing","Syncing…");
   try{
-    const res = await fetch(itemUrlFromCode(linkCode));
-    if(res.ok){
-      const data = await res.json();
-      if(data && data.sejal && data.hrishi){
-        state = data;
-      }
-      setSyncPill(null,"Synced ✓");
-      document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
-    } else {
-      setSyncPill("offline","Sync error — retrying soon");
+    const { data, error } = await _supabase
+      .from('pod_data')
+      .select('data')
+      .eq('id', linkCode)
+      .single();
+
+    if(error) throw error;
+
+    if(data && data.data && data.data.sejal && data.data.hrishi){
+      state = data.data;
     }
-  }catch(e){
-    setSyncPill("offline","Offline — will retry");
-  }
-  renderAll();
-}
-async function pushRemote(){
-  if(!linkCode) return;
-  try{
-    await fetch(itemUrlFromCode(linkCode), {
-      method:"PUT",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(state)
-    });
     setSyncPill(null,"Synced ✓");
     document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
   }catch(e){
-    setSyncPill("offline","Offline — changes saved locally, will retry");
+    setSyncPill("offline","Sync error — retrying soon");
   }
+  renderAll();
 }
-// read-merge-write: refetch latest, merge our local day-object in, then push
+
 async function saveChange(personKey, iso){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async ()=>{
     if(!linkCode) return;
     setSyncPill("syncing","Saving…");
     try{
-      const res = await fetch(itemUrlFromCode(linkCode));
-      let remote = res.ok ? await res.json() : null;
-      if(!remote || !remote.sejal || !remote.hrishi) remote = { sejal:{days:{}}, hrishi:{days:{}} };
-      // merge in this person's current local day (our most recent edit)
+      // Refetch latest state to merge safely
+      const { data } = await _supabase
+        .from('pod_data')
+        .select('data')
+        .eq('id', linkCode)
+        .single();
+
+      let remote = (data && data.data) ? data.data : { sejal:{days:{}}, hrishi:{days:{}} };
+      if(!remote.sejal) remote.sejal = {days:{}};
+      if(!remote.hrishi) remote.hrishi = {days:{}};
+
+      // Merge current local day
       remote[personKey].days[iso] = state[personKey].days[iso];
       state = remote;
-      await pushRemote();
+
+      const { error } = await _supabase
+        .from('pod_data')
+        .upsert({ id: linkCode, data: state, updated_at: new Date() });
+
+      if(error) throw error;
+
+      setSyncPill(null,"Synced ✓");
+      document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
     }catch(e){
       setSyncPill("offline","Offline — will retry");
     }
   }, 500);
+}
+
+function subscribeRealtime(){
+  if(!linkCode) return;
+  _supabase
+    .channel(`pod_${linkCode}`)
+    .on(
+      'postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'pod_data', filter: `id=eq.${linkCode}` },
+      (payload) => {
+        if(payload.new && payload.new.data){
+          state = payload.new.data;
+          renderAll();
+          setSyncPill(null,"Synced ✓");
+          document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
+        }
+      }
+    )
+    .subscribe();
 }
 
 /* =========================================================================
@@ -806,7 +822,6 @@ function handleCompletionChange(personKey, iso, wasComplete, nowComplete){
     celebratedToday[key] = true;
     confettiBurst(50);
     toast(`${PEOPLE[personKey].name}'s pea is glowing! ✨ ${niceDate(iso)} all done!`);
-    // check for both-complete
     const otherKey = personKey==="sejal" ? "hrishi" : "sejal";
     if(isDayComplete(otherKey, iso)){
       setTimeout(()=>{ confettiBurst(90); showBothBanner(); }, 500);
@@ -833,7 +848,7 @@ function renderAll(){
 }
 
 /* =========================================================================
-   ONBOARDING (create-shared-item / connect-with-code flows)
+   ONBOARDING
    ========================================================================= */
 async function createSharedItem(){
   const btn = document.getElementById("btnCreateShared");
@@ -841,18 +856,17 @@ async function createSharedItem(){
   btn.disabled = true;
   status.classList.remove("err");
   status.textContent = "Creating your shared tracker…";
+
   try{
-    const res = await fetch(CONFIG.API_BASE, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ sejal:{days:{}}, hrishi:{days:{}} })
-    });
-    if(!res.ok) throw new Error("Request failed: " + res.status);
-    const data = await res.json();
-    const uri = data.uri || data.url || "";
-    const m = uri.match(/\/v1\/json\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)/);
-    if(!m) throw new Error("Unexpected response shape");
-    const code = `${m[1]}.${m[2]}`;
+    const code = 'pod-' + Math.random().toString(36).substring(2, 9);
+    const initialData = { sejal:{days:{}}, hrishi:{days:{}} };
+
+    const { error } = await _supabase
+      .from('pod_data')
+      .insert([{ id: code, data: initialData }]);
+
+    if(error) throw error;
+
     storeCode(code);
     status.textContent = "Created! ✅";
     const shareBox = document.getElementById("shareBox");
@@ -865,6 +879,7 @@ async function createSharedItem(){
     btn.disabled = false;
   }
 }
+
 async function connectWithCode(rawInput){
   const status = document.getElementById("connectStatus");
   const code = extractCodeFromText(rawInput);
@@ -875,9 +890,16 @@ async function connectWithCode(rawInput){
   }
   status.classList.remove("err");
   status.textContent = "Connecting…";
+
   try{
-    const res = await fetch(itemUrlFromCode(code));
-    if(!res.ok) throw new Error("Not found (" + res.status + ")");
+    const { data, error } = await _supabase
+      .from('pod_data')
+      .select('data')
+      .eq('id', code)
+      .single();
+
+    if(error || !data) throw new Error("Tracker not found");
+
     storeCode(code);
     status.textContent = "Connected! ✅";
     setTimeout(startApp, 400);
@@ -886,6 +908,7 @@ async function connectWithCode(rawInput){
     status.textContent = "Couldn't connect — double-check the link/code and try again.";
   }
 }
+
 function wireOnboarding(){
   document.getElementById("btnCreateShared").addEventListener("click", createSharedItem);
   document.getElementById("continueAfterCreate").addEventListener("click", startApp);
@@ -899,6 +922,7 @@ function wireOnboarding(){
     connectWithCode(document.getElementById("codeInput").value);
   });
 }
+
 function wireRefreshButton(){
   document.getElementById("refreshBtn").addEventListener("click", async ()=>{
     const btn = document.getElementById("refreshBtn");
@@ -907,6 +931,7 @@ function wireRefreshButton(){
     btn.classList.remove("spinning");
   });
 }
+
 function wireGetLinkButton(){
   document.getElementById("getLinkBtn").addEventListener("click", ()=>{
     if(!linkCode) return;
@@ -925,21 +950,23 @@ async function startApp(){
   renderAll();
   scrollDayIntoView();
   await fetchRemote();
+  subscribeRealtime();
   wireRefreshButton();
   wireGetLinkButton();
   document.addEventListener("visibilitychange", ()=>{
     if(document.visibilityState==="visible") fetchRemote();
   });
 }
+
 (function init(){
   wireOnboarding();
   linkCode = getStoredCode();
   if(linkCode){
-    storeCode(linkCode); // normalize hash + localStorage together
+    storeCode(linkCode);
     startApp();
   } else {
     document.getElementById("onboardOverlay").style.display = "flex";
-    renderAll(); // render placeholder UI behind the overlay
+    renderAll();
   }
 })();
 </script>
