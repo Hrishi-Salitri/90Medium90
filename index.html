@@ -11,7 +11,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <!-- Supabase JS Client Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -62,72 +61,14 @@
     letter-spacing:0.3px;
   }
   header.top .sub{ color:var(--muted); font-size:14.5px; margin:0 0 6px; font-weight:600;}
-  .sync-pill{
+  .storage-pill{
     display:inline-flex; align-items:center; gap:6px;
     font-size:12px; font-weight:700; color:var(--pea-3);
     background:var(--cream); border:1.5px solid var(--mint-2);
     padding:5px 12px; border-radius:999px; box-shadow:var(--shadow-soft);
   }
-  .sync-pill .dot{width:8px;height:8px;border-radius:50%;background:#8cc63f;}
-  .sync-pill.syncing .dot{background:var(--gold); animation:pulse 1s infinite;}
-  .sync-pill.offline .dot{background:#e07a5f;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-
-  .setup-banner{
-    background:#fff6e0; border:1.5px dashed #e6b84f; color:#7a5b12;
-    border-radius:16px; padding:12px 16px; font-size:13.5px; font-weight:600;
-    max-width:900px; margin:10px auto; line-height:1.5;
-  }
-  .setup-banner code{background:#fff0c4; padding:1px 5px; border-radius:6px;}
-  .refresh-btn{
-    display:inline-flex; align-items:center; gap:5px; margin-left:8px;
-    font-size:12px; font-weight:700; color:var(--pea-3);
-    background:var(--cream); border:1.5px solid var(--mint-2); cursor:pointer;
-    padding:5px 12px; border-radius:999px; box-shadow:var(--shadow-soft);
-  }
-  .refresh-btn:active{ transform:scale(0.95); }
-  .refresh-btn.spinning{ animation:spin 0.8s linear infinite; }
-  @keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-
-  /* ---------- Onboarding overlay ---------- */
-  .onboard-overlay{
-    position:fixed; inset:0; background:rgba(47,58,42,0.55); z-index:10000;
-    display:flex; align-items:center; justify-content:center; padding:18px;
-  }
-  .onboard-card{
-    background:var(--cream); border-radius:24px; padding:26px 22px; max-width:420px;
-    width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); text-align:center;
-    max-height:92vh; overflow-y:auto;
-  }
-  .onboard-card .emoji{font-size:40px; margin-bottom:6px;}
-  .onboard-card h2{ margin:4px 0 6px; color:var(--pea-3); font-size:22px;}
-  .onboard-card p{ color:var(--muted); font-size:13.5px; line-height:1.5; margin:6px 0 16px;}
-  .onboard-btn{
-    display:block; width:100%; border:none; border-radius:14px; padding:13px;
-    font-family:'Baloo 2'; font-weight:700; font-size:15px; cursor:pointer; margin-bottom:10px;
-  }
-  .onboard-btn.primary{ background:linear-gradient(135deg, var(--pea-1), var(--pea-2)); color:#fff; }
-  .onboard-btn.primary:active{ transform:scale(0.98); }
-  .onboard-divider{ color:var(--muted); font-size:12px; font-weight:700; margin:14px 0 10px; text-transform:uppercase;}
-  .onboard-input{
-    width:100%; border:1.5px solid var(--mint-2); border-radius:12px; padding:11px;
-    font-family:'Quicksand'; font-size:13.5px; margin-bottom:10px; box-sizing:border-box;
-  }
-  .onboard-btn.secondary{ background:var(--mint-1); color:var(--pea-3); }
-  .onboard-status{ font-size:12.5px; font-weight:700; min-height:18px; margin:6px 0; color:var(--pea-3);}
-  .onboard-status.err{ color:#c0503a; }
-  .share-box{
-    background:var(--mint-1); border-radius:14px; padding:12px; margin:10px 0; text-align:left;
-  }
-  .share-box .lbl{font-size:11px; font-weight:800; color:var(--pea-3); text-transform:uppercase; margin-bottom:6px;}
-  .share-box textarea{
-    width:100%; border:1px solid var(--mint-2); border-radius:8px; padding:8px; font-size:11.5px;
-    font-family:monospace; resize:none; height:54px; box-sizing:border-box; color:var(--ink); background:#fff;
-  }
-  .share-box button{
-    margin-top:8px; border:none; background:var(--pea-2); color:#fff; font-weight:700;
-    font-size:12.5px; padding:7px 14px; border-radius:10px; cursor:pointer;
-  }
+  .storage-pill .dot{width:8px;height:8px;border-radius:50%;background:#8cc63f;}
+  .storage-pill.warn .dot{background:#e07a5f;}
 
   /* ---------- Overview stats ---------- */
   .overview{
@@ -316,9 +257,7 @@
     <div class="podlogo">🫛</div>
     <h1>90 Medium</h1>
     <div class="sub">Sejal &amp; Hrishi · two peas, one pod · Aug 4 – Nov 1, 2026</div>
-    <div class="sync-pill" id="syncPill"><span class="dot"></span><span id="syncText">Loading…</span></div>
-    <button class="refresh-btn" id="refreshBtn" title="Check for your partner's latest updates">🔄 Refresh</button>
-    <button class="refresh-btn" id="getLinkBtn" title="Copy your shareable link (handy for a new device)">🔗 Link</button>
+    <div class="storage-pill" id="storagePill"><span class="dot"></span><span id="storageText">Connecting live...</span></div>
   </header>
 
   <div class="overview" id="overview"></div>
@@ -341,49 +280,25 @@
   </div>
 
   <footer>
-    Made with 💚 for the 90 Medium challenge ·
-    <span id="lastSync">–</span>
+    Made with 💚 for the 90 Medium challenge · synced live across all devices
   </footer>
 </div>
 
 <div class="celebrate-toast" id="toast"></div>
-
-<div class="onboard-overlay" id="onboardOverlay" style="display:none;">
-  <div class="onboard-card">
-    <div class="emoji">🫛</div>
-    <h2>Let's link your pod</h2>
-    <p>No accounts, no files to edit. One of you creates your shared tracker, then sends the
-       other a link — that's the whole setup.</p>
-
-    <button class="onboard-btn primary" id="btnCreateShared">🌱 Start our tracker (I'm first)</button>
-    <div class="onboard-status" id="createStatus"></div>
-    <div class="share-box" id="shareBox" style="display:none;">
-      <div class="lbl">Send this link to your partner 💌</div>
-      <textarea id="shareLinkText" readonly></textarea>
-      <button id="copyShareBtn">Copy link</button>
-      <button id="continueAfterCreate" style="margin-left:8px; background:var(--pea-3);">Continue →</button>
-    </div>
-
-    <div class="onboard-divider">— or —</div>
-    <p style="margin-top:-6px;">Got a link or code from your partner? Paste it below.</p>
-    <input class="onboard-input" id="codeInput" placeholder="Paste link or code here">
-    <button class="onboard-btn secondary" id="btnConnect">🔗 Connect us</button>
-    <div class="onboard-status" id="connectStatus"></div>
-  </div>
-</div>
 
 <script>
 /* =========================================================================
    CONFIG & SUPABASE INITIALIZATION
    ========================================================================= */
 const CONFIG = {
-  START_DATE: "2026-08-04",   // Day 1
+  START_DATE: "2026-08-12",   // Day 1
   TOTAL_DAYS: 90,
+  STORAGE_KEY: "ninetyMediumState",
   SUPABASE_URL: "https://supabase.com/dashboard/project/nuelyvrhhopjxiasmqjc",         // Replace with your project URL
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51ZWx5dnJoaG9wanhpYXNtcWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1ODI5MTMsImV4cCI6MjEwMjE1ODkxM30.2_MWyiz_4IVjXIZ8iPWWiYTtFdurU3YlzkIXbkAKYog" // Replace with your anon key
 };
 
-const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
 /* =========================================================================
    ITEM DEFINITIONS
@@ -441,7 +356,6 @@ const ALL_DATES = Array.from({length: CONFIG.TOTAL_DAYS}, (_,i)=> addDays(START,
 function todayISO(){ return toISO(new Date()); }
 function dowShort(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"short"}); }
 function niceDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"}); }
-function shortDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{month:"short", day:"numeric"}); }
 function weekKey(iso){
   const d=parseISO(iso);
   const dow=(d.getDay()+6)%7; // 0=Mon
@@ -450,12 +364,89 @@ function weekKey(iso){
 }
 
 /* =========================================================================
+   LOCAL & SUPABASE DUAL STORAGE
+   ========================================================================= */
+function safeLocalGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function safeLocalSet(key,val){ try{ localStorage.setItem(key,val); return true; }catch(e){ return false; } }
+
+function loadLocalState(){
+  const raw = safeLocalGet(CONFIG.STORAGE_KEY);
+  if(raw){
+    try{
+      const parsed = JSON.parse(raw);
+      if(parsed && parsed.sejal && parsed.hrishi) return parsed;
+    }catch(e){ }
+  }
+  return { sejal:{days:{}}, hrishi:{days:{}} };
+}
+
+function updatePillStatus(status, isWarn=false){
+  const pill = document.getElementById("storagePill");
+  const text = document.getElementById("storageText");
+  pill.classList.toggle("warn", isWarn);
+  text.textContent = status;
+}
+
+async function syncWithSupabase(){
+  updatePillStatus("Syncing...");
+  try {
+    const { data, error } = await supabaseClient.from('tracker_state').select('data').eq('id', 1).single();
+    if (error && error.code !== 'PGRST116') {
+      console.error("Supabase load error:", error);
+      updatePillStatus("Saved locally (offline)", true);
+      return;
+    }
+    if (data && data.data) {
+      state = data.data;
+      safeLocalSet(CONFIG.STORAGE_KEY, JSON.stringify(state));
+      renderAll();
+    } else {
+      await saveState();
+    }
+    updatePillStatus("Synced with Supabase ☁️");
+  } catch(e) {
+    console.error("Supabase sync exception:", e);
+    updatePillStatus("Saved locally (offline)", true);
+  }
+}
+
+async function saveState(){
+  safeLocalSet(CONFIG.STORAGE_KEY, JSON.stringify(state));
+  updatePillStatus("Saving...");
+  try {
+    const { error } = await supabaseClient.from('tracker_state').upsert({ id: 1, data: state, updated_at: new Date() });
+    if(error) {
+      console.error("Supabase save error:", error);
+      updatePillStatus("Saved locally (cloud error)", true);
+    } else {
+      updatePillStatus("Synced with Supabase ☁️");
+    }
+  } catch(e) {
+    console.error("Supabase save exception:", e);
+    updatePillStatus("Saved locally (offline)", true);
+  }
+}
+
+function subscribeToRealtime(){
+  supabaseClient
+    .channel('public:tracker_state')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tracker_state', filter: 'id=eq.1' }, payload => {
+      if(payload.new && payload.new.data){
+        state = payload.new.data;
+        safeLocalSet(CONFIG.STORAGE_KEY, JSON.stringify(state));
+        renderAll();
+        toast("Updated live from other device! 🔄", 2000);
+      }
+    })
+    .subscribe();
+}
+
+/* =========================================================================
    STATE
    ========================================================================= */
-let state = { sejal:{days:{}}, hrishi:{days:{}} };
+let state = loadLocalState();
 let selectedDate = ALL_DATES.includes(todayISO()) ? todayISO() : START;
-let celebratedToday = {};
-let saveTimer = null;
+let celebratedToday = {}; 
 
 function blankDay(){ return { checks:{}, water:0, drinksCount:0 }; }
 function getDay(personKey, iso){
@@ -489,124 +480,6 @@ function weeklyCount(personKey, itemId, iso){
     if(weekKey(d)===wk && days[d].checks && days[d].checks[itemId]) count++;
   });
   return count;
-}
-
-/* =========================================================================
-   LINK CODE HELPERS
-   ========================================================================= */
-function safeLocalGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
-function safeLocalSet(key,val){ try{ localStorage.setItem(key,val); }catch(e){} }
-
-let linkCode = null;
-
-function extractCodeFromText(text){
-  if(!text) return null;
-  text = text.trim();
-  const hashMatch = text.match(/code=([a-zA-Z0-9\-]+)/);
-  if(hashMatch) return hashMatch[1];
-  if(/^[a-zA-Z0-9\-]+$/.test(text)) return text;
-  return null;
-}
-function getStoredCode(){
-  const hash = location.hash.replace(/^#/,"");
-  const params = new URLSearchParams(hash);
-  const fromHash = params.get("code");
-  if(fromHash) return fromHash;
-  return safeLocalGet("ninetyMediumCode");
-}
-function storeCode(code){
-  linkCode = code;
-  safeLocalSet("ninetyMediumCode", code);
-  const url = new URL(location.href);
-  url.hash = `code=${code}`;
-  history.replaceState(null, "", url.toString());
-}
-
-/* =========================================================================
-   REMOTE SYNC (Supabase Realtime & Database)
-   ========================================================================= */
-function setSyncPill(mode, text){
-  const pill=document.getElementById("syncPill");
-  pill.classList.remove("syncing","offline");
-  if(mode) pill.classList.add(mode);
-  document.getElementById("syncText").textContent = text;
-}
-
-async function fetchRemote(){
-  if(!linkCode) return;
-  setSyncPill("syncing","Syncing…");
-  try{
-    const { data, error } = await _supabase
-      .from('pod_data')
-      .select('data')
-      .eq('id', linkCode)
-      .single();
-
-    if(error) throw error;
-
-    if(data && data.data && data.data.sejal && data.data.hrishi){
-      state = data.data;
-    }
-    setSyncPill(null,"Synced ✓");
-    document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
-  }catch(e){
-    setSyncPill("offline","Sync error — retrying soon");
-  }
-  renderAll();
-}
-
-async function saveChange(personKey, iso){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async ()=>{
-    if(!linkCode) return;
-    setSyncPill("syncing","Saving…");
-    try{
-      // Refetch latest state to merge safely
-      const { data } = await _supabase
-        .from('pod_data')
-        .select('data')
-        .eq('id', linkCode)
-        .single();
-
-      let remote = (data && data.data) ? data.data : { sejal:{days:{}}, hrishi:{days:{}} };
-      if(!remote.sejal) remote.sejal = {days:{}};
-      if(!remote.hrishi) remote.hrishi = {days:{}};
-
-      // Merge current local day
-      remote[personKey].days[iso] = state[personKey].days[iso];
-      state = remote;
-
-      const { error } = await _supabase
-        .from('pod_data')
-        .upsert({ id: linkCode, data: state, updated_at: new Date() });
-
-      if(error) throw error;
-
-      setSyncPill(null,"Synced ✓");
-      document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
-    }catch(e){
-      setSyncPill("offline","Offline — will retry");
-    }
-  }, 500);
-}
-
-function subscribeRealtime(){
-  if(!linkCode) return;
-  _supabase
-    .channel(`pod_${linkCode}`)
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'pod_data', filter: `id=eq.${linkCode}` },
-      (payload) => {
-        if(payload.new && payload.new.data){
-          state = payload.new.data;
-          renderAll();
-          setSyncPill(null,"Synced ✓");
-          document.getElementById("lastSync").textContent = "last synced " + new Date().toLocaleTimeString();
-        }
-      }
-    )
-    .subscribe();
 }
 
 /* =========================================================================
@@ -773,7 +646,7 @@ function renderPersonCard(personKey){
       day.checks[itemId] = !day.checks[itemId];
       const nowComplete = isDayComplete(pKey, iso);
       handleCompletionChange(pKey, iso, wasComplete, nowComplete);
-      saveChange(pKey, iso);
+      saveState();
       renderAll();
     });
   });
@@ -782,7 +655,7 @@ function renderPersonCard(personKey){
     inp.addEventListener("change", ()=>{
       const [pKey, iso] = inp.dataset.drinkinput.split("|");
       getDay(pKey, iso).drinksCount = parseInt(inp.value||"0",10) || 0;
-      saveChange(pKey, iso);
+      saveState();
     });
   });
   el.querySelectorAll("[data-water]").forEach(btn=>{
@@ -794,7 +667,7 @@ function renderPersonCard(personKey){
       day.water = Math.max(0, (day.water||0) + amt);
       const nowComplete = isDayComplete(pKey, iso);
       handleCompletionChange(pKey, iso, wasComplete, nowComplete);
-      saveChange(pKey, iso);
+      saveState();
       renderAll();
     });
   });
@@ -809,7 +682,7 @@ function renderPersonCard(personKey){
         day.water = Math.max(0, (day.water||0) + amt);
         const nowComplete = isDayComplete(pKey, iso);
         handleCompletionChange(pKey, iso, wasComplete, nowComplete);
-        saveChange(pKey, iso);
+        saveState();
         renderAll();
       }
     });
@@ -848,126 +721,13 @@ function renderAll(){
 }
 
 /* =========================================================================
-   ONBOARDING
-   ========================================================================= */
-async function createSharedItem(){
-  const btn = document.getElementById("btnCreateShared");
-  const status = document.getElementById("createStatus");
-  btn.disabled = true;
-  status.classList.remove("err");
-  status.textContent = "Creating your shared tracker…";
-
-  try{
-    const code = 'pod-' + Math.random().toString(36).substring(2, 9);
-    const initialData = { sejal:{days:{}}, hrishi:{days:{}} };
-
-    const { error } = await _supabase
-      .from('pod_data')
-      .insert([{ id: code, data: initialData }]);
-
-    if(error) throw error;
-
-    storeCode(code);
-    status.textContent = "Created! ✅";
-    const shareBox = document.getElementById("shareBox");
-    const shareUrl = new URL(location.href); shareUrl.hash = `code=${code}`;
-    document.getElementById("shareLinkText").value = shareUrl.toString();
-    shareBox.style.display = "block";
-  }catch(e){
-    status.classList.add("err");
-    status.textContent = "Couldn't create it — check your connection and try again. (" + e.message + ")";
-    btn.disabled = false;
-  }
-}
-
-async function connectWithCode(rawInput){
-  const status = document.getElementById("connectStatus");
-  const code = extractCodeFromText(rawInput);
-  if(!code){
-    status.classList.add("err");
-    status.textContent = "That doesn't look like a valid link or code — try copying it again.";
-    return;
-  }
-  status.classList.remove("err");
-  status.textContent = "Connecting…";
-
-  try{
-    const { data, error } = await _supabase
-      .from('pod_data')
-      .select('data')
-      .eq('id', code)
-      .single();
-
-    if(error || !data) throw new Error("Tracker not found");
-
-    storeCode(code);
-    status.textContent = "Connected! ✅";
-    setTimeout(startApp, 400);
-  }catch(e){
-    status.classList.add("err");
-    status.textContent = "Couldn't connect — double-check the link/code and try again.";
-  }
-}
-
-function wireOnboarding(){
-  document.getElementById("btnCreateShared").addEventListener("click", createSharedItem);
-  document.getElementById("continueAfterCreate").addEventListener("click", startApp);
-  document.getElementById("copyShareBtn").addEventListener("click", ()=>{
-    const ta = document.getElementById("shareLinkText");
-    ta.select();
-    navigator.clipboard?.writeText(ta.value).catch(()=>{});
-    document.getElementById("copyShareBtn").textContent = "Copied ✓";
-  });
-  document.getElementById("btnConnect").addEventListener("click", ()=>{
-    connectWithCode(document.getElementById("codeInput").value);
-  });
-}
-
-function wireRefreshButton(){
-  document.getElementById("refreshBtn").addEventListener("click", async ()=>{
-    const btn = document.getElementById("refreshBtn");
-    btn.classList.add("spinning");
-    await fetchRemote();
-    btn.classList.remove("spinning");
-  });
-}
-
-function wireGetLinkButton(){
-  document.getElementById("getLinkBtn").addEventListener("click", ()=>{
-    if(!linkCode) return;
-    const url = new URL(location.href); url.hash = `code=${linkCode}`;
-    const link = url.toString();
-    navigator.clipboard?.writeText(link).catch(()=>{});
-    toast("Link copied — save it somewhere safe: " + link, 6000);
-  });
-}
-
-/* =========================================================================
    INIT
    ========================================================================= */
-async function startApp(){
-  document.getElementById("onboardOverlay").style.display = "none";
+(async function init(){
   renderAll();
   scrollDayIntoView();
-  await fetchRemote();
-  subscribeRealtime();
-  wireRefreshButton();
-  wireGetLinkButton();
-  document.addEventListener("visibilitychange", ()=>{
-    if(document.visibilityState==="visible") fetchRemote();
-  });
-}
-
-(function init(){
-  wireOnboarding();
-  linkCode = getStoredCode();
-  if(linkCode){
-    storeCode(linkCode);
-    startApp();
-  } else {
-    document.getElementById("onboardOverlay").style.display = "flex";
-    renderAll();
-  }
+  await syncWithSupabase();
+  subscribeToRealtime();
 })();
 </script>
 </body>
