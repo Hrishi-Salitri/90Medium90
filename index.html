@@ -358,12 +358,19 @@ function dowShort(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekd
 function niceDate(iso){ return parseISO(iso).toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"}); }
 
 // Precise Monday-to-Sunday Weekly Key (resets every Sunday night / Monday)
+// function weekKey(iso){
+//   const d = parseISO(iso);
+//   const day = d.getDay();
+//   const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday (0)
+//   const monday = new Date(d.setDate(diff));
+//   return toISO(monday);
+// } Monday to Sunday
+
+// Sunday to saturday
 function weekKey(iso){
   const d = parseISO(iso);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday (0)
-  const monday = new Date(d.setDate(diff));
-  return toISO(monday);
+  const sunday = new Date(d.setDate(d.getDate() - d.getDay()));
+  return toISO(sunday);
 }
 
 /* =========================================================================
